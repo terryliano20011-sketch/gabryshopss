@@ -1,17 +1,15 @@
 'use client'
 import { useState } from 'react'
+import Image from 'next/image'
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 
-type Product = { id: number; name: string; desc: string; price: number; type: string; icon: string }
+type Product = { id: number; name: string; desc: string; price: number; type: string; image: string }
 type CartItem = Product & { qty: number }
 
 const products: Product[] = [
-  { id:1, name:'T-Shirt Premium', desc:'Cotone 100%, vestibilità regolare', price:24.99, type:'fisico', icon:'👕' },
-  { id:2, name:'Guida PDF Pro', desc:'Corso completo in formato digitale', price:9.99, type:'digitale', icon:'📄' },
-  { id:3, name:'Hoodie Oversize', desc:'Felpa pesante, più colori disponibili', price:44.99, type:'fisico', icon:'🧥' },
-  { id:4, name:'Pack Preset Foto', desc:'50 preset Lightroom pronti all uso', price:14.99, type:'digitale', icon:'🎨' },
-  { id:5, name:'Cap Snapback', desc:'Cappellino regolabile, ricamo frontale', price:19.99, type:'fisico', icon:'🧢' },
-  { id:6, name:'Template CV', desc:'3 template Word professionali', price:4.99, type:'digitale', icon:'📝' },
+  { id:1, name:'Panno Microfibra Auto 500GSM', desc:'30x40cm — Pulizia perfetta, zero graffi sulla vernice', price:7.00, type:'fisico', image:'/images/panno1.jpg' },
+  { id:2, name:'Pellicola Oscurante 90% — 50x300cm', desc:'Blocca UV, privacy totale, anti-graffio, senza metalli', price:49.99, type:'fisico', image:'/images/pellicola1.jpg' },
+  { id:3, name:'Kit Professionale Wrapping 14pz', desc:'Raschietti, taglierina, lame — tutto per applicare pellicole', price:7.99, type:'fisico', image:'/images/kit1.jpg' },
 ]
 
 export default function Home() {
@@ -44,7 +42,6 @@ export default function Home() {
     <PayPalScriptProvider options={{ clientId: 'Aaw-5XjE4JVOxAo86vZE7hUP5IpaAXmGxBf-8VflGfr9KjtF21hsJ7SViQkaV5FKDEPmXvWrW2D608CS', currency: 'EUR' }}>
     <div style={{ minHeight: '100vh', background: '#fff' }}>
 
-      {/* NAV */}
       <nav style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'1rem 2rem', borderBottom:'1px solid #eee', position:'sticky', top:0, background:'rgba(255,255,255,0.95)', backdropFilter:'blur(10px)', zIndex:50 }}>
         <div style={{ fontSize:20, fontWeight:600, letterSpacing:'-0.5px' }}>GabryShopss</div>
         <div style={{ display:'flex', gap:'2rem' }}>
@@ -58,17 +55,15 @@ export default function Home() {
         </button>
       </nav>
 
-      {/* HERO */}
-      <div style={{ textAlign:'center', padding:'5rem 2rem 3rem', background:'#fff' }}>
-        <h1 style={{ fontSize:48, fontWeight:700, letterSpacing:'-2px', marginBottom:'1rem', lineHeight:1.1, color:'#000' }}>Qualità senza<br />compromessi.</h1>
-        <p style={{ fontSize:16, color:'#666', maxWidth:420, margin:'0 auto 2rem' }}>Prodotti fisici e digitali selezionati. Spedizione rapida, download immediato.</p>
+      <div style={{ textAlign:'center', padding:'5rem 2rem 3rem' }}>
+        <h1 style={{ fontSize:48, fontWeight:700, letterSpacing:'-2px', marginBottom:'1rem', lineHeight:1.1, color:'#000' }}>Prodotti Auto<br />di Qualità.</h1>
+        <p style={{ fontSize:16, color:'#666', maxWidth:420, margin:'0 auto 2rem' }}>Tutto quello che serve per la cura e la protezione della tua auto.</p>
         <div style={{ display:'flex', gap:12, justifyContent:'center' }}>
           <button style={{ background:'#1a1a1a', color:'#fff', border:'none', padding:'12px 28px', borderRadius:24, fontSize:15, cursor:'pointer', fontWeight:500 }}>Scopri i prodotti</button>
           <button style={{ background:'none', color:'#1a1a1a', border:'1px solid #ddd', padding:'12px 28px', borderRadius:24, fontSize:15, cursor:'pointer' }}>Chi siamo</button>
         </div>
       </div>
 
-      {/* FILTRI */}
       <div style={{ display:'flex', gap:8, justifyContent:'center', padding:'1rem 2rem' }}>
         {['tutti','fisico','digitale'].map(f => (
           <button key={f} onClick={() => setFilter(f)} style={{ padding:'7px 20px', borderRadius:20, border:'1px solid #ddd', background: filter===f ? '#1a1a1a' : 'none', color: filter===f ? '#fff' : '#666', fontSize:13, cursor:'pointer', fontWeight: filter===f ? 500 : 400 }}>
@@ -77,13 +72,14 @@ export default function Home() {
         ))}
       </div>
 
-      {/* PRODOTTI */}
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(240px, 1fr))', gap:'1.5rem', padding:'1.5rem 2rem 4rem', maxWidth:1200, margin:'0 auto' }}>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(300px, 1fr))', gap:'1.5rem', padding:'1.5rem 2rem 4rem', maxWidth:1200, margin:'0 auto' }}>
         {filtered.map(p => {
           const inCart = cart.find(c => c.id === p.id)
           return (
             <div key={p.id} style={{ border:'1px solid #eee', borderRadius:16, overflow:'hidden', background:'#fff' }}>
-              <div style={{ height:180, background:'#f8f8f8', display:'flex', alignItems:'center', justifyContent:'center', fontSize:52 }}>{p.icon}</div>
+              <div style={{ position:'relative', height:240, background:'#f8f8f8' }}>
+                <Image src={p.image} alt={p.name} fill style={{ objectFit:'cover' }} />
+              </div>
               <div style={{ padding:'1rem' }}>
                 <div style={{ fontSize:11, color:'#aaa', textTransform:'uppercase', letterSpacing:'0.5px', marginBottom:4 }}>{p.type}</div>
                 <div style={{ fontSize:16, fontWeight:600, marginBottom:4 }}>{p.name}</div>
@@ -100,16 +96,13 @@ export default function Home() {
         })}
       </div>
 
-      {/* OVERLAY */}
       {cartOpen && <div onClick={() => { setCartOpen(false); setCheckingOut(false) }} style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.3)', zIndex:99 }} />}
 
-      {/* CARRELLO */}
       <div style={{ position:'fixed', top:0, right: cartOpen ? 0 : -420, width:400, height:'100%', background:'#fff', borderLeft:'1px solid #eee', zIndex:100, display:'flex', flexDirection:'column', transition:'right 0.3s' }}>
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'1.25rem 1.5rem', borderBottom:'1px solid #eee' }}>
           <span style={{ fontSize:17, fontWeight:600 }}>{checkingOut ? 'Pagamento' : 'Carrello'}</span>
           <button onClick={() => { setCartOpen(false); setCheckingOut(false) }} style={{ background:'none', border:'none', fontSize:20, cursor:'pointer', color:'#888' }}>✕</button>
         </div>
-
         {!checkingOut ? (
           <>
             <div style={{ flex:1, overflowY:'auto', padding:'1rem 1.5rem' }}>
@@ -117,7 +110,9 @@ export default function Home() {
                 <div style={{ textAlign:'center', padding:'3rem 1rem', color:'#aaa', fontSize:14 }}>Il carrello è vuoto</div>
               ) : cart.map(c => (
                 <div key={c.id} style={{ display:'flex', gap:12, padding:'12px 0', borderBottom:'1px solid #f0f0f0', alignItems:'center' }}>
-                  <div style={{ width:48, height:48, background:'#f8f8f8', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:24, flexShrink:0 }}>{c.icon}</div>
+                  <div style={{ position:'relative', width:48, height:48, borderRadius:10, overflow:'hidden', flexShrink:0, background:'#f8f8f8' }}>
+                    <Image src={c.image} alt={c.name} fill style={{ objectFit:'cover' }} />
+                  </div>
                   <div style={{ flex:1 }}>
                     <div style={{ fontSize:14, fontWeight:500 }}>{c.name}</div>
                     <div style={{ fontSize:13, color:'#888' }}>€{c.price.toFixed(2)}</div>
@@ -171,10 +166,7 @@ export default function Home() {
                     return actions.order.create({
                       intent: 'CAPTURE',
                       purchase_units: [{
-                        amount: {
-                          currency_code: 'EUR',
-                          value: totalPrice.toFixed(2)
-                        },
+                        amount: { currency_code: 'EUR', value: totalPrice.toFixed(2) },
                         description: 'Ordine GabryShopss'
                       }]
                     })
@@ -192,7 +184,6 @@ export default function Home() {
         )}
       </div>
 
-      {/* TOAST */}
       {toast && <div style={{ position:'fixed', bottom:'2rem', left:'50%', transform:'translateX(-50%)', background:'#1a1a1a', color:'#fff', padding:'10px 22px', borderRadius:24, fontSize:14, zIndex:200 }}>{toast}</div>}
     </div>
     </PayPalScriptProvider>
