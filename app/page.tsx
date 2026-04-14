@@ -53,7 +53,7 @@ export default function Home() {
         <div onClick={() => setSelectedProduct(null)} style={{ fontSize:20, fontWeight:600, letterSpacing:'-0.5px', cursor:'pointer' }}>GabryShopss</div>
         <div style={{ display:'flex', gap:'2rem' }}>
           {['Prodotti','Chi siamo','Contatti'].map(l => (
-            <span key={l} style={{ fontSize:14, color:'#666', cursor:'pointer' }}>{l}</span>
+            <a key={l} href={l === 'Prodotti' ? '/' : l === 'Chi siamo' ? '/chi-siamo' : '/contatti'} style={{ fontSize:14, color:'#666', textDecoration:'none' }}>{l}</a>
           ))}
         </div>
         <button onClick={() => setCartOpen(true)} style={{ position:'relative', background:'none', border:'none', fontSize:22, cursor:'pointer' }}>
