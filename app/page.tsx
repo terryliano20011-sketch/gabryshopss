@@ -101,7 +101,7 @@ export default function Home() {
             <p style={{ fontSize:16, color:'#666', maxWidth:420, margin:'0 auto 2rem' }}>Tutto quello che serve per la cura e la protezione della tua auto.</p>
             <div style={{ display:'flex', gap:12, justifyContent:'center' }}>
               <button style={{ background:'#1a1a1a', color:'#fff', border:'none', padding:'12px 28px', borderRadius:24, fontSize:15, cursor:'pointer', fontWeight:500 }}>Scopri i prodotti</button>
-              <button style={{ background:'none', color:'#1a1a1a', border:'1px solid #ddd', padding:'12px 28px', borderRadius:24, fontSize:15, cursor:'pointer' }}>Chi siamo</button>
+              <a href='/contatti' style={{ background:'none', color:'#1a1a1a', border:'1px solid #ddd', padding:'12px 28px', borderRadius:24, fontSize:15, textDecoration:'none', display:'inline-block' }}>Contattaci</a>
             </div>
           </div>
 
