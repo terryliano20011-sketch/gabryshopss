@@ -52,7 +52,7 @@ export default function Home() {
       <nav style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'1rem 2rem', borderBottom:'1px solid #eee', position:'sticky', top:0, background:'rgba(255,255,255,0.95)', backdropFilter:'blur(10px)', zIndex:50 }}>
         <div onClick={() => setSelectedProduct(null)} style={{ fontSize:20, fontWeight:600, letterSpacing:'-0.5px', cursor:'pointer' }}>GabryShopss</div>
         <div style={{ display:'flex', gap:'2rem' }}>
-          {['Prodotti','Chi siamo','Contatti'].map(l => (
+          {['Prodotti','Chi siamo','Contattaci'].map(l => (
             <a key={l} href={l === 'Prodotti' ? '/' : l === 'Chi siamo' ? '/chi-siamo' : '/contatti'} style={{ fontSize:14, color:'#666', textDecoration:'none' }}>{l}</a>
           ))}
         </div>
@@ -101,7 +101,7 @@ export default function Home() {
             <p style={{ fontSize:16, color:'#666', maxWidth:420, margin:'0 auto 2rem' }}>Tutto quello che serve per la cura e la protezione della tua auto.</p>
             <div style={{ display:'flex', gap:12, justifyContent:'center' }}>
               <button style={{ background:'#1a1a1a', color:'#fff', border:'none', padding:'12px 28px', borderRadius:24, fontSize:15, cursor:'pointer', fontWeight:500 }}>Scopri i prodotti</button>
-              <a href='/contatti' style={{ background:'none', color:'#1a1a1a', border:'1px solid #ddd', padding:'12px 28px', borderRadius:24, fontSize:15, textDecoration:'none', display:'inline-block' }}>Contattaci</a>
+              
             </div>
           </div>
 
