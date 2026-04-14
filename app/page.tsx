@@ -247,6 +247,15 @@ export default function Home() {
       </div>
 
       {toast && <div style={{ position:'fixed', bottom:'2rem', left:'50%', transform:'translateX(-50%)', background:'#1a1a1a', color:'#fff', padding:'10px 22px', borderRadius:24, fontSize:14, zIndex:200 }}>{toast}</div>}
+
+      <footer style={{ borderTop:'1px solid #eee', padding:'2rem', textAlign:'center' }}>
+        <p style={{ fontSize:13, color:'#aaa', marginBottom:8 }}>© 2025 GabryShopss — Tutti i diritti riservati</p>
+        <div style={{ display:'flex', gap:'1.5rem', justifyContent:'center' }}>
+          <a href="/privacy" style={{ fontSize:13, color:'#888', textDecoration:'none' }}>Privacy Policy</a>
+          <a href="/termini" style={{ fontSize:13, color:'#888', textDecoration:'none' }}>Termini e Condizioni</a>
+          <a href="mailto:terryliano20011@gmail.com" style={{ fontSize:13, color:'#888', textDecoration:'none' }}>Contatti</a>
+        </div>
+      </footer>
     </div>
     </PayPalScriptProvider>
   )
