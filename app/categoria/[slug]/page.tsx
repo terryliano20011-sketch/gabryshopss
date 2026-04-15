@@ -5,7 +5,7 @@ import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { supabase } from '../../../lib/supabase'
 import { useParams } from 'next/navigation'
 
-type Product = { id: number; name: string; short_desc: string; long_desc: string; price: number; type: string; image: string; images: string[]; categoria: string }
+type Product = { id: number; name: string; short_desc: string; long_desc: string; price: number; type: string; image: string; images: string[]; categoria: string; taglie?: string[] }
 type CartItem = Product & { qty: number }
 type Review = { id: number; nome: string; stelle: number; testo: string; created_at: string }
 
@@ -33,6 +33,7 @@ export default function CategoriaPage() {
   const [reviews, setReviews] = useState<Review[]>([])
   const [newReview, setNewReview] = useState({ nome:'', stelle:5, testo:'' })
   const [zoomedImg, setZoomedImg] = useState<string|null>(null)
+  const [tagliaSel, setTagliaSel] = useState<string>('')
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user))
@@ -161,6 +162,16 @@ export default function CategoriaPage() {
               <h1 style={{ fontSize:32, fontWeight:700, marginBottom:10, color:'#F5F5F0', fontFamily:'Playfair Display, serif', lineHeight:1.2 }}>{selectedProduct.name}</h1>
               {avgStelle && <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:16 }}><span style={{ color:'#C9A84C', fontSize:16 }}>{'★'.repeat(Math.round(Number(avgStelle)))}</span><span style={{ fontSize:13, color:'#888880' }}>{avgStelle} ({reviews.length} recensioni)</span></div>}
               <p style={{ fontSize:15, color:'#888880', lineHeight:1.8, marginBottom:28 }}>{selectedProduct.long_desc}</p>
+              {selectedProduct.taglie && selectedProduct.taglie.length > 0 && (
+                <div style={{ marginBottom:20 }}>
+                  <div style={{ fontSize:12, color:'#C9A84C', letterSpacing:'2px', textTransform:'uppercase', marginBottom:10, fontWeight:500 }}>Taglia</div>
+                  <div style={{ display:'flex', gap:8 }}>
+                    {selectedProduct.taglie.map(t => (
+                      <button key={t} onClick={() => setTagliaSel(t)} style={{ width:44, height:44, borderRadius:10, border: tagliaSel===t ? '2px solid #C9A84C' : '1px solid rgba(201,168,76,0.2)', background: tagliaSel===t ? 'rgba(201,168,76,0.15)' : 'transparent', color: tagliaSel===t ? '#C9A84C' : '#888880', fontSize:13, fontWeight:600, cursor:'pointer', transition:'all 0.2s' }}>{t}</button>
+                    ))}
+                  </div>
+                </div>
+              )}
               {selectedProduct.type === 'fisico' && <p style={{ fontSize:13, color:'#888880', marginBottom:20 }}>🚚 Spedizione €4.99 · Gratuita sopra €50</p>}
               {selectedProduct.type === 'digitale' && <p style={{ fontSize:13, color:'#C9A84C', marginBottom:20 }}>✅ Download immediato</p>}
               <div style={{ fontSize:38, fontWeight:700, marginBottom:28, color:'#C9A84C', fontFamily:'Playfair Display, serif' }}>€{Number(selectedProduct.price).toFixed(2)}</div>
