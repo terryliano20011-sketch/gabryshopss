@@ -332,7 +332,7 @@ export default function Home() {
       </div>
 
       {/* WHATSAPP */}
-      <a href="https://wa.me/39INSERISCINUMERO" target="_blank" style={{ position:'fixed', bottom:'2rem', right:'2rem', background:'#25D366', color:'#fff', width:56, height:56, borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:28, textDecoration:'none', boxShadow:'0 4px 20px rgba(37,211,102,0.4)', zIndex:90, transition:'transform 0.2s' }} onMouseEnter={e => (e.currentTarget.style.transform='scale(1.1)')} onMouseLeave={e => (e.currentTarget.style.transform='scale(1)')}>
+      <a href="https://wa.me/393518435322" target="_blank" style={{ position:'fixed', bottom:'2rem', right:'2rem', background:'#25D366', color:'#fff', width:56, height:56, borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:28, textDecoration:'none', boxShadow:'0 4px 20px rgba(37,211,102,0.4)', zIndex:90, transition:'transform 0.2s' }} onMouseEnter={e => (e.currentTarget.style.transform='scale(1.1)')} onMouseLeave={e => (e.currentTarget.style.transform='scale(1)')}>
         💬
       </a>
 
