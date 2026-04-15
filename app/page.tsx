@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
+import { supabase } from './lib/supabase'
 
 type Categoria = { id: number; nome: string; slug: string; descrizione: string; emoji: string; active: boolean }
 
@@ -19,10 +19,10 @@ export default function HomePage() {
   }, [])
 
   const covers: Record<string, string> = {
-    auto: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600&q=80',
-    vestiti: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&q=80',
-    gioielli: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80',
-    elettronica: 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=600&q=80',
+    auto: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
+    vestiti: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
+    gioielli: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
+    elettronica: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
   }
 
   return (
@@ -36,6 +36,16 @@ export default function HomePage() {
         ::-webkit-scrollbar-track { background: #0A0A0A; }
         ::-webkit-scrollbar-thumb { background: #8B6914; border-radius: 2px; }
         @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+        @media (max-width: 768px) {
+          .hero-title { font-size: 42px !important; letter-spacing: -1px !important; }
+          .hero-sub { font-size: 15px !important; }
+          .nav-desktop { display: none !important; }
+          .cat-grid { grid-template-columns: 1fr 1fr !important; gap: 12px !important; padding: 0 1rem 3rem !important; }
+          .hero-section { padding: 4rem 1.5rem 2.5rem !important; }
+          .nav-inner { padding: 1rem 1.25rem !important; }
+          .logo { font-size: 18px !important; }
+          .footer-links { gap: 1rem !important; }
+        }
         @keyframes shimmer { 0% { background-position:-200% 0; } 100% { background-position:200% 0; } }
         .cat-card { transition: transform 0.3s, border-color 0.3s; cursor: pointer; }
         .cat-card:hover { transform: translateY(-8px); border-color: rgba(201,168,76,0.5) !important; }
@@ -46,9 +56,9 @@ export default function HomePage() {
       `}</style>
 
       {/* NAV */}
-      <nav style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'1.25rem 2.5rem', borderBottom:'1px solid rgba(201,168,76,0.1)', position:'sticky', top:0, background:'rgba(10,10,10,0.95)', backdropFilter:'blur(20px)', zIndex:50 }}>
+      <nav className='nav-inner' style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'1.25rem 2.5rem', borderBottom:'1px solid rgba(201,168,76,0.1)', position:'sticky', top:0, background:'rgba(10,10,10,0.95)', backdropFilter:'blur(20px)', zIndex:50 }}>
         <div style={{ fontSize:22, fontWeight:700, fontFamily:'Playfair Display, serif', color:'#C9A84C' }}>GabryShopss</div>
-        <div style={{ display:'flex', gap:'2rem', alignItems:'center' }}>
+        <div className='nav-desktop' style={{ display:'flex', gap:'2rem', alignItems:'center' }}>
           <a href="/" className="nav-link" style={{ fontSize:14, color:'#C9A84C', textDecoration:'none', fontWeight:500 }}>Home</a>
           <a href="/chi-siamo" className="nav-link" style={{ fontSize:14, color:'#888880', textDecoration:'none' }}>Chi siamo</a>
           <a href="/contatti" className="nav-link" style={{ fontSize:14, color:'#888880', textDecoration:'none' }}>Contattaci</a>
@@ -59,7 +69,7 @@ export default function HomePage() {
       </nav>
 
       {/* HERO */}
-      <div style={{ textAlign:'center', padding:'8rem 2rem 5rem', position:'relative', overflow:'hidden' }}>
+      <div className='hero-section' style={{ textAlign:'center', padding:'8rem 2rem 5rem', position:'relative', overflow:'hidden' }}>
         <div style={{ position:'absolute', inset:0, background:'radial-gradient(ellipse 70% 60% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 70%)', pointerEvents:'none' }} />
         <div style={{ fontSize:12, color:'#C9A84C', letterSpacing:'4px', textTransform:'uppercase', marginBottom:'1.5rem', fontWeight:500, animation:'fadeUp 0.6s ease' }}>Il tuo negozio premium</div>
         <h1 style={{ fontSize:72, fontWeight:700, letterSpacing:'-3px', marginBottom:'1.5rem', lineHeight:1.0, fontFamily:'Playfair Display, serif', animation:'fadeUp 0.6s ease 0.1s both' }}>
@@ -83,21 +93,20 @@ export default function HomePage() {
         </div>
 
         {loading ? (
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(260px, 1fr))', gap:'1.5rem' }}>
+          <div className='cat-grid' style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(260px, 1fr))', gap:'1.5rem' }}>
             {[1,2,3,4].map(i => (
               <div key={i} style={{ height:280, borderRadius:20, background:'linear-gradient(90deg, #141414 25%, #1C1C1C 50%, #141414 75%)', backgroundSize:'200% 100%', animation:'shimmer 1.5s infinite' }} />
             ))}
           </div>
         ) : (
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(260px, 1fr))', gap:'1.5rem' }}>
+          <div className='cat-grid' style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(260px, 1fr))', gap:'1.5rem' }}>
             {categorie.map((cat, idx) => (
               <a key={cat.id} href={`/categoria/${cat.slug}`} style={{ textDecoration:'none' }}>
                 <div className="cat-card" style={{ background:'#141414', border:'1px solid rgba(201,168,76,0.15)', borderRadius:20, overflow:'hidden', animation:`fadeUp 0.5s ease ${idx*0.1}s both` }}>
                   {/* Cover categoria */}
-                  <div style={{ height:180, position:'relative', overflow:'hidden' }}>
-                    <img src={covers[cat.slug] || covers.auto} alt={cat.nome} style={{ width:'100%', height:'100%', objectFit:'cover', transition:'transform 0.4s' }} />
-                    <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%)' }} />
-                    <div style={{ position:'absolute', bottom:16, left:16, fontSize:36 }}>{cat.emoji}</div>
+                  <div style={{ height:180, background: covers[cat.slug] || covers.auto, display:'flex', alignItems:'center', justifyContent:'center', position:'relative' }}>
+                    <div style={{ fontSize:72, filter:'drop-shadow(0 4px 20px rgba(0,0,0,0.5))' }}>{cat.emoji}</div>
+                    <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.6) 100%)' }} />
                   </div>
                   <div style={{ padding:'1.5rem' }}>
                     <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8 }}>

@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
-import { supabase } from '../../../lib/supabase'
+import { supabase } from '../../lib/supabase'
 import { useParams } from 'next/navigation'
 
 type Product = { id: number; name: string; short_desc: string; long_desc: string; price: number; type: string; image: string; images: string[]; categoria: string; taglie?: string[] }
@@ -103,6 +103,19 @@ export default function CategoriaPage() {
         ::-webkit-scrollbar-track { background: #0A0A0A; }
         ::-webkit-scrollbar-thumb { background: #8B6914; border-radius: 2px; }
         @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+        @media (max-width: 768px) {
+          .nav-desktop { display: none !important; }
+          .nav-inner { padding: 1rem 1.25rem !important; }
+          .product-grid { grid-template-columns: 1fr 1fr !important; gap: 12px !important; padding: 0 1rem 3rem !important; }
+          .product-detail { grid-template-columns: 1fr !important; gap: 1.5rem !important; padding: 1rem !important; }
+          .product-detail-img { height: 300px !important; }
+          .product-title { font-size: 22px !important; }
+          .product-price { font-size: 28px !important; }
+          .cart-panel { width: 100% !important; }
+          .cat-header { padding: 2rem 1.25rem 1.5rem !important; }
+          .back-btn { margin-bottom: 1rem !important; }
+          .correlati-grid { grid-template-columns: 1fr 1fr !important; }
+        }
         @keyframes slideDown { from { transform:translateY(-100%); opacity:0; } to { transform:translateY(0); opacity:1; } }
         @keyframes shimmer { 0% { background-position:-200% 0; } 100% { background-position:200% 0; } }
         .card { transition: transform 0.3s, border-color 0.3s; border: 1px solid rgba(201,168,76,0.1) !important; }
@@ -124,9 +137,9 @@ export default function CategoriaPage() {
       )}
 
       {/* NAV */}
-      <nav style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'1.25rem 2.5rem', borderBottom:'1px solid rgba(201,168,76,0.1)', position:'sticky', top:0, background:'rgba(10,10,10,0.95)', backdropFilter:'blur(20px)', zIndex:50 }}>
+      <nav className='nav-inner' style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'1.25rem 2.5rem', borderBottom:'1px solid rgba(201,168,76,0.1)', position:'sticky', top:0, background:'rgba(10,10,10,0.95)', backdropFilter:'blur(20px)', zIndex:50 }}>
         <a href="/" style={{ fontSize:22, fontWeight:700, fontFamily:'Playfair Display, serif', color:'#C9A84C', textDecoration:'none' }}>GabryShopss</a>
-        <div style={{ display:'flex', gap:'2rem', alignItems:'center' }}>
+        <div className='nav-desktop' style={{ display:'flex', gap:'2rem', alignItems:'center' }}>
           <a href="/" style={{ fontSize:14, color:'#888880', textDecoration:'none', transition:'color 0.2s' }} onMouseEnter={e=>(e.currentTarget.style.color='#C9A84C')} onMouseLeave={e=>(e.currentTarget.style.color='#888880')}>Home</a>
           <a href="/chi-siamo" style={{ fontSize:14, color:'#888880', textDecoration:'none', transition:'color 0.2s' }} onMouseEnter={e=>(e.currentTarget.style.color='#C9A84C')} onMouseLeave={e=>(e.currentTarget.style.color='#888880')}>Chi siamo</a>
           <a href="/contatti" style={{ fontSize:14, color:'#888880', textDecoration:'none', transition:'color 0.2s' }} onMouseEnter={e=>(e.currentTarget.style.color='#C9A84C')} onMouseLeave={e=>(e.currentTarget.style.color='#888880')}>Contattaci</a>
@@ -143,7 +156,7 @@ export default function CategoriaPage() {
       {selectedProduct ? (
         <div style={{ maxWidth:1100, margin:'0 auto', padding:'2.5rem 2rem', animation:'fadeUp 0.4s ease' }}>
           <button onClick={() => setSelectedProduct(null)} style={{ background:'none', border:'none', fontSize:14, color:'#888880', cursor:'pointer', marginBottom:'2rem', display:'flex', alignItems:'center', gap:8 }} onMouseEnter={e=>(e.currentTarget.style.color='#C9A84C')} onMouseLeave={e=>(e.currentTarget.style.color='#888880')}>← Torna a {categoria?.nome}</button>
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'4rem', marginBottom:'4rem' }}>
+          <div className='product-detail' style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'4rem', marginBottom:'4rem' }}>
             <div>
               <div onClick={() => setZoomedImg(selectedProduct.images[selectedImg])} style={{ position:'relative', height:420, borderRadius:16, overflow:'hidden', background:'#141414', marginBottom:12, cursor:'zoom-in', border:'1px solid rgba(201,168,76,0.1)' }}>
                 <Image src={selectedProduct.images[selectedImg]} alt={selectedProduct.name} fill style={{ objectFit:'cover', transition:'transform 0.4s' }} />
@@ -208,7 +221,7 @@ export default function CategoriaPage() {
           {/* CORRELATI */}
           <div style={{ borderTop:'1px solid rgba(201,168,76,0.15)', paddingTop:'3rem' }}>
             <h2 style={{ fontSize:26, fontWeight:700, marginBottom:'1.5rem', fontFamily:'Playfair Display, serif' }}>Potrebbe interessarti</h2>
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(220px, 1fr))', gap:'1rem' }}>
+            <div className='correlati-grid' style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(220px, 1fr))', gap:'1rem' }}>
               {products.filter(p => p.id !== selectedProduct.id).slice(0,3).map(p => (
                 <div key={p.id} className="card" onClick={() => { setSelectedProduct(p); setSelectedImg(0); window.scrollTo({top:0,behavior:'smooth'}); }} style={{ background:'#141414', borderRadius:12, overflow:'hidden', cursor:'pointer' }}>
                   <div style={{ position:'relative', height:140, background:'#1C1C1C' }}><Image src={p.image} alt={p.name} fill style={{ objectFit:'cover' }} /></div>
@@ -224,7 +237,7 @@ export default function CategoriaPage() {
       ) : (
         <>
           {/* HEADER CATEGORIA */}
-          <div style={{ padding:'4rem 2.5rem 3rem', maxWidth:1200, margin:'0 auto' }}>
+          <div className='cat-header' style={{ padding:'4rem 2.5rem 3rem', maxWidth:1200, margin:'0 auto' }}>
             <a href="/" style={{ fontSize:13, color:'#888880', textDecoration:'none', display:'flex', alignItems:'center', gap:6, marginBottom:'2rem', transition:'color 0.2s' }} onMouseEnter={e=>(e.currentTarget.style.color='#C9A84C')} onMouseLeave={e=>(e.currentTarget.style.color='#888880')}>← Tutte le categorie</a>
             <div style={{ display:'flex', alignItems:'center', gap:16, marginBottom:'0.5rem' }}>
               <span style={{ fontSize:48 }}>{categoria?.emoji}</span>
@@ -246,7 +259,7 @@ export default function CategoriaPage() {
               <a href="/" style={{ color:'#C9A84C', textDecoration:'none', fontSize:14 }}>← Torna alle categorie</a>
             </div>
           ) : (
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(300px, 1fr))', gap:'1.5rem', padding:'0 2rem 5rem', maxWidth:1200, margin:'0 auto' }}>
+            <div className='product-grid' style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(300px, 1fr))', gap:'1.5rem', padding:'0 2rem 5rem', maxWidth:1200, margin:'0 auto' }}>
               {products.map((p, idx) => {
                 const inCart = cart.find(c => c.id === p.id)
                 return (
@@ -275,7 +288,7 @@ export default function CategoriaPage() {
 
       {/* OVERLAY + CARRELLO */}
       {cartOpen && <div onClick={() => { setCartOpen(false); setCheckingOut(false) }} style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.7)', zIndex:99, backdropFilter:'blur(4px)' }} />}
-      <div style={{ position:'fixed', top:0, right: cartOpen ? 0 : -440, width:420, height:'100%', background:'#0F0F0F', borderLeft:'1px solid rgba(201,168,76,0.15)', zIndex:100, display:'flex', flexDirection:'column', transition:'right 0.35s cubic-bezier(0.4,0,0.2,1)' }}>
+      <div className='cart-panel' style={{ position:'fixed', top:0, right: cartOpen ? 0 : -440, width:420, height:'100%', background:'#0F0F0F', borderLeft:'1px solid rgba(201,168,76,0.15)', zIndex:100, display:'flex', flexDirection:'column', transition:'right 0.35s cubic-bezier(0.4,0,0.2,1)' }}>
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'1.5rem', borderBottom:'1px solid rgba(201,168,76,0.1)' }}>
           <span style={{ fontSize:18, fontWeight:700, fontFamily:'Playfair Display, serif' }}>{checkingOut ? 'Pagamento' : 'Carrello'}</span>
           <button onClick={() => { setCartOpen(false); setCheckingOut(false) }} style={{ background:'none', border:'1px solid rgba(201,168,76,0.2)', borderRadius:8, padding:'6px 10px', cursor:'pointer', color:'#888880', fontSize:16 }}>✕</button>
