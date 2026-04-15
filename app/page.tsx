@@ -41,8 +41,8 @@ export default function Home() {
 
   const filtered = filter === 'tutti' ? products : products.filter(p => p.type === filter)
   const totalQty = cart.reduce((s, c) => s + c.qty, 0)
-  const shippingCost = cart.some(c => c.type === 'fisico') ? (totalPrice >= 50 ? 0 : 4.99) : 0
   const totalPrice = cart.reduce((s, c) => s + c.price * c.qty, 0)
+  const shippingCost = cart.some(c => c.type === 'fisico') ? (totalPrice >= 50 ? 0 : 4.99) : 0
   const discountAmount = totalPrice * discount
   const grandTotal = totalPrice - discountAmount + shippingCost
 
