@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
-import { supabase } from '../../lib/supabase'
+import { supabase } from '../../../lib/supabase'
 import { useParams } from 'next/navigation'
 
 type Product = { id: number; name: string; short_desc: string; long_desc: string; price: number; type: string; image: string; images: string[]; categoria: string }
