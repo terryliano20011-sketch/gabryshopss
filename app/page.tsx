@@ -19,10 +19,10 @@ export default function HomePage() {
   }, [])
 
   const covers: Record<string, string> = {
-    auto: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
-    vestiti: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
-    gioielli: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
-    elettronica: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
+    auto: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600&q=80',
+    vestiti: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&q=80',
+    gioielli: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80',
+    elettronica: 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=600&q=80',
   }
 
   return (
@@ -94,9 +94,10 @@ export default function HomePage() {
               <a key={cat.id} href={`/categoria/${cat.slug}`} style={{ textDecoration:'none' }}>
                 <div className="cat-card" style={{ background:'#141414', border:'1px solid rgba(201,168,76,0.15)', borderRadius:20, overflow:'hidden', animation:`fadeUp 0.5s ease ${idx*0.1}s both` }}>
                   {/* Cover categoria */}
-                  <div style={{ height:180, background: covers[cat.slug] || covers.auto, display:'flex', alignItems:'center', justifyContent:'center', position:'relative' }}>
-                    <div style={{ fontSize:72, filter:'drop-shadow(0 4px 20px rgba(0,0,0,0.5))' }}>{cat.emoji}</div>
-                    <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.6) 100%)' }} />
+                  <div style={{ height:180, position:'relative', overflow:'hidden' }}>
+                    <img src={covers[cat.slug] || covers.auto} alt={cat.nome} style={{ width:'100%', height:'100%', objectFit:'cover', transition:'transform 0.4s' }} />
+                    <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%)' }} />
+                    <div style={{ position:'absolute', bottom:16, left:16, fontSize:36 }}>{cat.emoji}</div>
                   </div>
                   <div style={{ padding:'1.5rem' }}>
                     <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8 }}>
