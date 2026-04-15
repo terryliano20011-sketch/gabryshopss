@@ -1,6 +1,5 @@
 'use client'
 import { useState, useEffect } from 'react'
-import Image from 'next/image'
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { supabase } from '../../../lib/supabase'
 import { useParams } from 'next/navigation'
@@ -146,13 +145,13 @@ export default function CategoriaPage() {
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'4rem', marginBottom:'4rem' }}>
             <div>
               <div onClick={() => setZoomedImg(selectedProduct.images[selectedImg])} style={{ position:'relative', height:420, borderRadius:16, overflow:'hidden', background:'#141414', marginBottom:12, cursor:'zoom-in', border:'1px solid rgba(201,168,76,0.1)' }}>
-                <Image src={selectedProduct.images[selectedImg]} alt={selectedProduct.name} fill style={{ objectFit:'cover', transition:'transform 0.4s' }} />
+                <img src={selectedProduct.images[selectedImg]} alt={selectedProduct.name} style={{ width:'100%', height:'100%', objectFit:'cover', transition:'transform 0.4s', position:'absolute', inset:0 }} />
                 <div style={{ position:'absolute', top:12, right:12, background:'rgba(0,0,0,0.7)', color:'#C9A84C', padding:'6px 12px', borderRadius:20, fontSize:11, border:'1px solid rgba(201,168,76,0.3)' }}>🔍 Zoom</div>
               </div>
               <div style={{ display:'flex', gap:8 }}>
                 {selectedProduct.images.map((img, i) => (
                   <div key={i} onClick={() => setSelectedImg(i)} style={{ position:'relative', width:76, height:76, borderRadius:10, overflow:'hidden', cursor:'pointer', border: selectedImg===i ? `2px solid ${G}` : '2px solid rgba(201,168,76,0.1)', background:'#141414', transition:'border-color 0.2s' }}>
-                    <Image src={img} alt="" fill style={{ objectFit:'cover' }} />
+                    <img src={img} alt= style={{ width:'100%', height:'100%', objectFit:'cover' }} />
                   </div>
                 ))}
               </div>
@@ -211,7 +210,7 @@ export default function CategoriaPage() {
             <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(220px, 1fr))', gap:'1rem' }}>
               {products.filter(p => p.id !== selectedProduct.id).slice(0,3).map(p => (
                 <div key={p.id} className="card" onClick={() => { setSelectedProduct(p); setSelectedImg(0); window.scrollTo({top:0,behavior:'smooth'}); }} style={{ background:'#141414', borderRadius:12, overflow:'hidden', cursor:'pointer' }}>
-                  <div style={{ position:'relative', height:140, background:'#1C1C1C' }}><Image src={p.image} alt={p.name} fill style={{ objectFit:'cover' }} /></div>
+                  <div style={{ position:'relative', height:140, background:'#1C1C1C' }}><img src={p.image} alt={p.name} style={{ width:'100%', height:'100%', objectFit:'cover' }} /></div>
                   <div style={{ padding:'0.875rem' }}>
                     <div style={{ fontSize:13, fontWeight:600, marginBottom:4, color:'#F5F5F0' }}>{p.name}</div>
                     <div style={{ fontSize:15, fontWeight:700, color:'#C9A84C' }}>€{Number(p.price).toFixed(2)}</div>
@@ -252,7 +251,7 @@ export default function CategoriaPage() {
                 return (
                   <div key={p.id} className="card" style={{ background:'#141414', borderRadius:16, overflow:'hidden', cursor:'pointer', animation:`fadeUp 0.5s ease ${idx*0.1}s both` }} onClick={() => { setSelectedProduct(p); setSelectedImg(0); }}>
                     <div style={{ position:'relative', height:260, background:'#1C1C1C' }}>
-                      <Image src={p.image} alt={p.name} fill style={{ objectFit:'cover' }} />
+                      <img src={p.image} alt={p.name} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
                     </div>
                     <div style={{ padding:'1.25rem' }}>
                       <div style={{ fontSize:10, color:'#C9A84C', textTransform:'uppercase', letterSpacing:'2px', marginBottom:6, fontWeight:500 }}>{p.type}</div>
@@ -287,7 +286,7 @@ export default function CategoriaPage() {
                 <div style={{ textAlign:'center', padding:'4rem 1rem', color:'#444440' }}><div style={{ fontSize:48, marginBottom:'1rem', opacity:0.5 }}>🛒</div><div style={{ fontSize:14 }}>Il carrello è vuoto</div></div>
               ) : cart.map(c => (
                 <div key={c.id} style={{ display:'flex', gap:12, padding:'14px 0', borderBottom:'1px solid rgba(255,255,255,0.05)', alignItems:'center' }}>
-                  <div style={{ position:'relative', width:52, height:52, borderRadius:10, overflow:'hidden', flexShrink:0, background:'#1C1C1C', border:'1px solid rgba(201,168,76,0.1)' }}><Image src={c.image} alt={c.name} fill style={{ objectFit:'cover' }} /></div>
+                  <div style={{ position:'relative', width:52, height:52, borderRadius:10, overflow:'hidden', flexShrink:0, background:'#1C1C1C', border:'1px solid rgba(201,168,76,0.1)' }}><img src={c.image} alt={c.name} style={{ width:'100%', height:'100%', objectFit:'cover' }} /></div>
                   <div style={{ flex:1 }}>
                     <div style={{ fontSize:14, fontWeight:500, color:'#F5F5F0' }}>{c.name}</div>
                     <div style={{ fontSize:13, color:'#C9A84C', fontWeight:600 }}>€{Number(c.price).toFixed(2)}</div>
