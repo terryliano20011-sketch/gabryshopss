@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { supabase } from '../lib/supabase'
+import { useEffect as useEffectAuth } from 'react'
 
 type Product = { id: number; name: string; short_desc: string; long_desc: string; price: number; type: string; image: string; images: string[]; badge?: string }
 type CartItem = Product & { qty: number }
@@ -19,6 +20,12 @@ export default function Home() {
   const [selectedImg, setSelectedImg] = useState(0)
   const [shipping, setShipping] = useState({ name:'', email:'', address:'', city:'', cap:'' })
   const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<any>(null)
+
+  useEffectAuth(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user))
+    supabase.auth.onAuthStateChange((_, session) => setUser(session?.user ?? null))
+  }, [])
   const [bannerVisible, setBannerVisible] = useState(true)
   const [hoveredId, setHoveredId] = useState<number|null>(null)
   const [coupon, setCoupon] = useState('')
@@ -106,6 +113,7 @@ export default function Home() {
             <a key={label} href={href} className="nav-link" style={{ fontSize:14, color:'#666', textDecoration:'none' }}>{label}</a>
           ))}
         </div>
+        <a href={user ? '/ordini' : '/auth'} style={{ fontSize:13, color:'#666', textDecoration:'none', marginRight:8 }}>{user ? '👤 Account' : 'Accedi'}</a>
         <button onClick={() => setCartOpen(true)} style={{ position:'relative', background:'none', border:'none', fontSize:22, cursor:'pointer' }}>
           🛒
           {totalQty > 0 && (
@@ -320,6 +328,7 @@ export default function Home() {
                   onApprove={(data, actions) => {
                     return actions.order!.capture().then(() => {
                       fetch('/api/ordine', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cart, shipping, total: grandTotal.toFixed(2), customerEmail: shipping.email }) })
+                      if (user) { supabase.from('orders').insert({ user_id: user.id, items: cart, shipping, total: grandTotal }) }
                       setPaid(true)
                       setCart([])
                     })
