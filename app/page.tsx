@@ -17,7 +17,7 @@ export default function Home() {
   const [checkingOut, setCheckingOut] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<Product|null>(null)
   const [selectedImg, setSelectedImg] = useState(0)
-  const [shipping, setShipping] = useState({ name:'', address:'', city:'', cap:'' })
+  const [shipping, setShipping] = useState({ name:'', email:'', address:'', city:'', cap:'' })
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -208,6 +208,7 @@ export default function Home() {
                 <div style={{ marginBottom:'1rem' }}>
                   <div style={{ fontSize:15, fontWeight:600, marginBottom:12 }}>Dati di spedizione</div>
                   <input placeholder="Nome e Cognome" value={shipping.name} onChange={e => setShipping({...shipping, name:e.target.value})} style={inputStyle} />
+                  <input placeholder="Email (per conferma ordine)" value={shipping.email} onChange={e => setShipping({...shipping, email:e.target.value})} style={inputStyle} />
                   <input placeholder="Indirizzo" value={shipping.address} onChange={e => setShipping({...shipping, address:e.target.value})} style={inputStyle} />
                   <div style={{ display:'flex', gap:8 }}>
                     <input placeholder="Città" value={shipping.city} onChange={e => setShipping({...shipping, city:e.target.value})} style={{...inputStyle, flex:1}} />
@@ -243,7 +244,7 @@ export default function Home() {
                   }}
                   onApprove={(data, actions) => {
                     return actions.order!.capture().then(() => {
-                      fetch('/api/ordine', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cart, shipping, total: grandTotal.toFixed(2) }) })
+                      fetch('/api/ordine', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cart, shipping, total: grandTotal.toFixed(2), customerEmail: shipping.email }) })
                       setPaid(true)
                       setCart([])
                     })
