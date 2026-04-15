@@ -78,8 +78,8 @@ export default function Admin() {
     <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'#f8f8f8' }}>
       <div style={{ background:'#fff', padding:'2rem', borderRadius:16, border:'1px solid #eee', width:320 }}>
         <h1 style={{ fontSize:20, fontWeight:700, marginBottom:'1.5rem', textAlign:'center' }}>🔒 Admin GabryShopss</h1>
-        <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} onKeyDown={e => e.key === 'Enter' && password === 'gabry2025' && setAuthed(true)} style={inputStyle} />
-        <button onClick={() => password === 'gabry2025' ? setAuthed(true) : alert('Password errata!')} style={{ width:'100%', background:'#1a1a1a', color:'#fff', border:'none', padding:12, borderRadius:24, fontSize:15, cursor:'pointer', fontWeight:500 }}>
+        <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} onKeyDown={e => e.key === 'Enter' && password === 'Gabry2007!' && setAuthed(true)} style={inputStyle} />
+        <button onClick={() => password === 'Gabry2007!' ? setAuthed(true) : alert('Password errata!')} style={{ width:'100%', background:'#1a1a1a', color:'#fff', border:'none', padding:12, borderRadius:24, fontSize:15, cursor:'pointer', fontWeight:500 }}>
           Accedi
         </button>
       </div>
