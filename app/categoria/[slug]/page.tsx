@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
-import { supabase } from '../../../lib/supabase'
+import { supabase } from '../../lib/supabase'
 import { useParams } from 'next/navigation'
 
 type Product = { id: number; name: string; short_desc: string; long_desc: string; price: number; type: string; image: string; images: string[]; categoria: string; taglie?: string[] }
@@ -269,7 +269,7 @@ export default function CategoriaPage() {
                       <div style={{ fontSize:13, color:'#888880', marginBottom:16, lineHeight:1.6 }}>{p.short_desc}</div>
                       <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
                         <span style={{ fontSize: isMobile ? 16 : 22, fontWeight:700, color:'#C9A84C', fontFamily:'Playfair Display, serif' }}>€{Number(p.price).toFixed(2)}</span>
-                        <button className={inCart ? '' : 'btn-gold'} onClick={e => { e.stopPropagation(); if (p.taglie && p.taglie.length > 0) { setSelectedProduct(p); setSelectedImg(0); } else { addToCart(p); } }} style={{ border: inCart ? '1px solid #2a7a4a' : 'none', background: inCart ? 'rgba(42,122,74,0.2)' : undefined, color: inCart ? '#4ade80' : undefined, padding:'8px 18px', borderRadius:20, fontSize:13, cursor:'pointer', fontWeight:600, transition:'all 0.2s' }}>
+                        <button className={inCart ? '' : 'btn-gold'} onClick={e => { e.stopPropagation(); addToCart(p); }} style={{ border: inCart ? '1px solid #2a7a4a' : 'none', background: inCart ? 'rgba(42,122,74,0.2)' : undefined, color: inCart ? '#4ade80' : undefined, padding:'8px 18px', borderRadius:20, fontSize:13, cursor:'pointer', fontWeight:600, transition:'all 0.2s' }}>
                           {inCart ? '✓ Aggiunto' : '+ Aggiungi'}
                         </button>
                       </div>
@@ -299,7 +299,7 @@ export default function CategoriaPage() {
                   <div style={{ position:'relative', width:52, height:52, borderRadius:10, overflow:'hidden', flexShrink:0, background:'#1C1C1C', border:'1px solid rgba(201,168,76,0.1)' }}><Image src={c.image} alt={c.name} fill style={{ objectFit:'cover' }} /></div>
                   <div style={{ flex:1 }}>
                     <div style={{ fontSize:14, fontWeight:500, color:'#F5F5F0' }}>{c.name}</div>
-                    <div style={{ fontSize:13, color:'#C9A84C', fontWeight:600 }}>€{Number(c.price).toFixed(2)}</div>
+                    <div style={{ fontSize:13, color:'#C9A84C', fontWeight:600 }}>€{Number(c.price).toFixed(2)}{c.taglia ? <span style={{ fontSize:11, color:'#888880', marginLeft:6, background:'rgba(201,168,76,0.1)', padding:'1px 6px', borderRadius:8, border:'1px solid rgba(201,168,76,0.2)' }}>{c.taglia}</span> : null}</div>
                     <div style={{ display:'flex', alignItems:'center', gap:10, marginTop:8 }}>
                       <button onClick={() => changeQty(c.id, -1)} style={{ width:26, height:26, borderRadius:'50%', border:'1px solid rgba(201,168,76,0.2)', background:'none', cursor:'pointer', fontSize:16, color:'#C9A84C' }}>−</button>
                       <span style={{ fontSize:13, fontWeight:600, color:'#F5F5F0', minWidth:16, textAlign:'center' }}>{c.qty}</span>
