@@ -62,7 +62,7 @@ export default function HomePage() {
           <a href="/chi-siamo" className="nav-link" style={{ fontSize:14, color:'#888880', textDecoration:'none' }}>Chi siamo</a>
           <a href="/contatti" className="nav-link" style={{ fontSize:14, color:'#888880', textDecoration:'none' }}>Contattaci</a>
         </div>
-        <a href={user ? '/ordini' : '/auth'} style={{ fontSize:13, color:'#888880', textDecoration:'none', transition:'color 0.2s' }}
+        <a href={user ? '/ordini' : '/auth'} style={{ display: isMobile ? 'none' : 'block', fontSize:13, color:'#888880', textDecoration:'none', transition:'color 0.2s' }}
           onMouseEnter={e => (e.currentTarget.style.color='#C9A84C')}
           onMouseLeave={e => (e.currentTarget.style.color='#888880')}>{user ? '👤 Account' : 'Accedi'}</a>
       </nav>
