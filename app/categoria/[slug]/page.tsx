@@ -32,6 +32,7 @@ export default function CategoriaPage() {
   const [user, setUser] = useState<any>(null)
   const [reviews, setReviews] = useState<Review[]>([])
   const [newReview, setNewReview] = useState({ nome:'', stelle:5, testo:'' })
+  const [hasOrdered, setHasOrdered] = useState(false)
   const [zoomedImg, setZoomedImg] = useState<string|null>(null)
   const [isMobile, setIsMobile] = useState(false)
 
@@ -58,8 +59,16 @@ export default function CategoriaPage() {
       supabase.from('reviews').select('*').eq('product_id', selectedProduct.id).order('created_at', { ascending: false }).then(({ data }) => {
         if (data) setReviews(data)
       })
+      if (user) {
+        supabase.from('orders').select('id, items').eq('user_id', user.id).then(({ data: orders }) => {
+          if (orders) {
+            const bought = orders.some((o: any) => o.items?.some((item: any) => item.id === selectedProduct.id))
+            setHasOrdered(bought)
+          }
+        })
+      }
     }
-  }, [selectedProduct])
+  }, [selectedProduct, user])
 
   const totalQty = cart.reduce((s, c) => s + c.qty, 0)
   const totalPrice = cart.reduce((s, c) => s + c.price * c.qty, 0)
@@ -197,14 +206,27 @@ export default function CategoriaPage() {
           {/* RECENSIONI */}
           <div style={{ borderTop:'1px solid rgba(201,168,76,0.15)', paddingTop:'3rem', marginBottom:'3rem' }}>
             <h2 style={{ fontSize:26, fontWeight:700, marginBottom:'2rem', fontFamily:'Playfair Display, serif' }}>Recensioni {reviews.length > 0 && <span style={{ color:'#C9A84C' }}>({reviews.length})</span>}</h2>
-            <div style={{ background:'#141414', border:'1px solid rgba(201,168,76,0.15)', borderRadius:16, padding:'1.5rem', marginBottom:'2rem' }}>
-              <input placeholder="Il tuo nome" value={newReview.nome} onChange={e => setNewReview({...newReview, nome:e.target.value})} style={inputStyle} />
-              <div style={{ display:'flex', gap:4, marginBottom:12 }}>
-                {[1,2,3,4,5].map(s => <button key={s} onClick={() => setNewReview({...newReview, stelle:s})} style={{ background:'none', border:'none', fontSize:26, cursor:'pointer', color: s <= newReview.stelle ? '#C9A84C' : '#333' }}>★</button>)}
+            {!user ? (
+              <div style={{ background:'#141414', border:'1px solid rgba(201,168,76,0.15)', borderRadius:16, padding:'1.5rem', marginBottom:'2rem', textAlign:'center' }}>
+                <div style={{ fontSize:32, marginBottom:'0.75rem' }}>🔒</div>
+                <p style={{ color:'#888880', fontSize:14, marginBottom:'1rem' }}>Devi essere loggato per lasciare una recensione</p>
+                <a href="/auth" style={{ background:'linear-gradient(135deg, #C9A84C, #E8C97A)', color:'#000', padding:'10px 24px', borderRadius:24, fontSize:14, fontWeight:600, textDecoration:'none' }}>Accedi o Registrati</a>
               </div>
-              <textarea placeholder="La tua opinione..." value={newReview.testo} onChange={e => setNewReview({...newReview, testo:e.target.value})} rows={3} style={{...inputStyle, resize:'vertical'}} />
-              <button className="btn-gold" onClick={submitReview} style={{ border:'none', padding:'10px 24px', borderRadius:24, fontSize:14, cursor:'pointer', fontWeight:600 }}>Invia</button>
-            </div>
+            ) : !hasOrdered ? (
+              <div style={{ background:'#141414', border:'1px solid rgba(201,168,76,0.15)', borderRadius:16, padding:'1.5rem', marginBottom:'2rem', textAlign:'center' }}>
+                <div style={{ fontSize:32, marginBottom:'0.75rem' }}>🛍️</div>
+                <p style={{ color:'#888880', fontSize:14 }}>Solo chi ha acquistato questo prodotto può lasciare una recensione</p>
+              </div>
+            ) : (
+              <div style={{ background:'#141414', border:'1px solid rgba(201,168,76,0.15)', borderRadius:16, padding:'1.5rem', marginBottom:'2rem' }}>
+                <input placeholder="Il tuo nome" value={newReview.nome} onChange={e => setNewReview({...newReview, nome:e.target.value})} style={inputStyle} />
+                <div style={{ display:'flex', gap:4, marginBottom:12 }}>
+                  {[1,2,3,4,5].map(s => <button key={s} onClick={() => setNewReview({...newReview, stelle:s})} style={{ background:'none', border:'none', fontSize:26, cursor:'pointer', color: s <= newReview.stelle ? '#C9A84C' : '#333' }}>★</button>)}
+                </div>
+                <textarea placeholder="La tua opinione..." value={newReview.testo} onChange={e => setNewReview({...newReview, testo:e.target.value})} rows={3} style={{...inputStyle, resize:'vertical'}} />
+                <button className="btn-gold" onClick={submitReview} style={{ border:'none', padding:'10px 24px', borderRadius:24, fontSize:14, cursor:'pointer', fontWeight:600 }}>Invia recensione</button>
+              </div>
+            )}
             {reviews.map(r => (
               <div key={r.id} style={{ background:'#141414', border:'1px solid rgba(201,168,76,0.1)', borderRadius:12, padding:'1.25rem', marginBottom:10 }}>
                 <div style={{ display:'flex', justifyContent:'space-between', marginBottom:6 }}><span style={{ fontWeight:600 }}>{r.nome}</span><span style={{ fontSize:12, color:'#444440' }}>{new Date(r.created_at).toLocaleDateString('it-IT')}</span></div>
@@ -299,7 +321,7 @@ export default function CategoriaPage() {
                   <div style={{ position:'relative', width:52, height:52, borderRadius:10, overflow:'hidden', flexShrink:0, background:'#1C1C1C', border:'1px solid rgba(201,168,76,0.1)' }}><Image src={c.image} alt={c.name} fill style={{ objectFit:'cover' }} /></div>
                   <div style={{ flex:1 }}>
                     <div style={{ fontSize:14, fontWeight:500, color:'#F5F5F0' }}>{c.name}</div>
-                    <div style={{ fontSize:13, color:'#C9A84C', fontWeight:600 }}>€{Number(c.price).toFixed(2)}{c.taglia ? <span style={{ fontSize:11, color:'#888880', marginLeft:6, background:'rgba(201,168,76,0.1)', padding:'1px 6px', borderRadius:8, border:'1px solid rgba(201,168,76,0.2)' }}>{c.taglia}</span> : null}</div>
+                    <div style={{ fontSize:13, color:'#C9A84C', fontWeight:600 }}>€{Number(c.price).toFixed(2)}</div>
                     <div style={{ display:'flex', alignItems:'center', gap:10, marginTop:8 }}>
                       <button onClick={() => changeQty(c.id, -1)} style={{ width:26, height:26, borderRadius:'50%', border:'1px solid rgba(201,168,76,0.2)', background:'none', cursor:'pointer', fontSize:16, color:'#C9A84C' }}>−</button>
                       <span style={{ fontSize:13, fontWeight:600, color:'#F5F5F0', minWidth:16, textAlign:'center' }}>{c.qty}</span>
