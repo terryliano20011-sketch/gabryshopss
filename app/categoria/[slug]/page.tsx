@@ -6,7 +6,7 @@ import { supabase } from '../../lib/supabase'
 import { useParams } from 'next/navigation'
 
 type Product = { id: number; name: string; short_desc: string; long_desc: string; price: number; type: string; image: string; images: string[]; categoria: string; taglie?: string[] }
-type CartItem = Product & { qty: number }
+type CartItem = Product & { qty: number; taglia?: string }
 type Review = { id: number; nome: string; stelle: number; testo: string; created_at: string }
 
 const G = '#C9A84C'
@@ -68,11 +68,11 @@ export default function CategoriaPage() {
   const grandTotal = totalPrice - discountAmount + shippingCost
   const avgStelle = reviews.length > 0 ? (reviews.reduce((s, r) => s + r.stelle, 0) / reviews.length).toFixed(1) : null
 
-  function addToCart(p: Product) {
+  function addToCart(p: Product, taglia?: string) {
     setCart(prev => {
-      const ex = prev.find(c => c.id === p.id)
-      if (ex) return prev.map(c => c.id === p.id ? { ...c, qty: c.qty + 1 } : c)
-      return [...prev, { ...p, qty: 1 }]
+      const ex = prev.find(c => c.id === p.id && c.taglia === taglia)
+      if (ex) return prev.map(c => c.id === p.id && c.taglia === taglia ? { ...c, qty: c.qty + 1 } : c)
+      return [...prev, { ...p, qty: 1, taglia }]
     })
     setToast('✓ ' + p.name + ' aggiunto!')
     setTimeout(() => setToast(''), 2500)
@@ -185,12 +185,12 @@ export default function CategoriaPage() {
               {selectedProduct.type === 'digitale' && <p style={{ fontSize:13, color:'#C9A84C', marginBottom:20 }}>✅ Download immediato</p>}
               <div style={{ fontSize: isMobile ? 28 : 38, fontWeight:700, marginBottom:28, color:'#C9A84C', fontFamily:'Playfair Display, serif' }}>€{Number(selectedProduct.price).toFixed(2)}</div>
               <div style={{ display:'flex', gap:10, marginBottom:10 }}>
-                <button className="btn-gold" onClick={() => addToCart(selectedProduct)} style={{ flex:1, border:'none', padding:'15px', borderRadius:24, fontSize:15, cursor:'pointer', fontWeight:600 }}>
+                <button className="btn-gold" onClick={() => addToCart(selectedProduct, selectedTaglia)} style={{ flex:1, border:'none', padding:'15px', borderRadius:24, fontSize:15, cursor:'pointer', fontWeight:600 }}>
                   {cart.find(c => c.id === selectedProduct.id) ? '✓ Aggiunto' : '+ Aggiungi al carrello'}
                 </button>
                 <button className="btn-ghost" onClick={() => { navigator.clipboard.writeText(window.location.href).then(() => setToast('🔗 Link copiato!')) }} style={{ border:'none', padding:'15px 18px', borderRadius:24, fontSize:18, cursor:'pointer' }}>📤</button>
               </div>
-              <button className="btn-ghost" onClick={() => { addToCart(selectedProduct); setCartOpen(true); }} style={{ border:'none', padding:'15px', borderRadius:24, fontSize:15, cursor:'pointer', fontWeight:500 }}>Acquista subito</button>
+              <button className="btn-ghost" onClick={() => { addToCart(selectedProduct, selectedTaglia); setCartOpen(true); }} style={{ border:'none', padding:'15px', borderRadius:24, fontSize:15, cursor:'pointer', fontWeight:500 }}>Acquista subito</button>
             </div>
           </div>
 
@@ -351,7 +351,7 @@ export default function CategoriaPage() {
                 </div>
                 <div style={{ marginBottom:'1.5rem', background:'#141414', borderRadius:12, padding:'1rem', border:'1px solid rgba(201,168,76,0.1)' }}>
                   <div style={{ fontSize:14, fontWeight:600, marginBottom:10, color:'#F5F5F0' }}>Riepilogo</div>
-                  {cart.map(c => <div key={c.id} style={{ display:'flex', justifyContent:'space-between', fontSize:13, color:'#888880', padding:'4px 0' }}><span>{c.name} x{c.qty}</span><span>€{(Number(c.price)*c.qty).toFixed(2)}</span></div>)}
+                  {cart.map(c => <div key={c.id} style={{ display:'flex', justifyContent:'space-between', fontSize:13, color:'#888880', padding:'4px 0' }}><span>{c.name}{c.taglia ? " (" + c.taglia + ")" : ""} x{c.qty}</span><span>€{(Number(c.price)*c.qty).toFixed(2)}</span></div>)}
                   <div style={{ display:'flex', justifyContent:'space-between', fontWeight:700, fontSize:16, marginTop:10, paddingTop:10, borderTop:'1px solid rgba(201,168,76,0.1)', color:'#C9A84C' }}><span>Totale</span><span>€{grandTotal.toFixed(2)}</span></div>
                 </div>
                 <PayPalButtons
