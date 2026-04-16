@@ -10,7 +10,7 @@ export default function SearchBar() {
   const ref = useRef(null)
   const router = useRouter()
   useEffect(() => {
-    const h = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
+    const h = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
     document.addEventListener('mousedown', h)
     return () => document.removeEventListener('mousedown', h)
   }, [])
