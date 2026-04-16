@@ -269,7 +269,7 @@ export default function CategoriaPage() {
                       <div style={{ fontSize:13, color:'#888880', marginBottom:16, lineHeight:1.6 }}>{p.short_desc}</div>
                       <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
                         <span style={{ fontSize: isMobile ? 16 : 22, fontWeight:700, color:'#C9A84C', fontFamily:'Playfair Display, serif' }}>€{Number(p.price).toFixed(2)}</span>
-                        <button className={inCart ? '' : 'btn-gold'} onClick={e => { e.stopPropagation(); addToCart(p); }} style={{ border: inCart ? '1px solid #2a7a4a' : 'none', background: inCart ? 'rgba(42,122,74,0.2)' : undefined, color: inCart ? '#4ade80' : undefined, padding:'8px 18px', borderRadius:20, fontSize:13, cursor:'pointer', fontWeight:600, transition:'all 0.2s' }}>
+                        <button className={inCart ? '' : 'btn-gold'} onClick={e => { e.stopPropagation(); if (p.taglie && p.taglie.length > 0) { setSelectedProduct(p); setSelectedImg(0); } else { addToCart(p); } }} style={{ border: inCart ? '1px solid #2a7a4a' : 'none', background: inCart ? 'rgba(42,122,74,0.2)' : undefined, color: inCart ? '#4ade80' : undefined, padding:'8px 18px', borderRadius:20, fontSize:13, cursor:'pointer', fontWeight:600, transition:'all 0.2s' }}>
                           {inCart ? '✓ Aggiunto' : '+ Aggiungi'}
                         </button>
                       </div>
