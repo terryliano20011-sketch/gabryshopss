@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { supabase } from './lib/supabase'
+import { supabase } from '../lib/supabase'
 
 type Categoria = { id: number; nome: string; slug: string; descrizione: string; emoji: string; active: boolean }
 

@@ -1,1 +1,0 @@
-import{NextResponse}from 'next/server';import{writeFileSync,mkdirSync}from 'fs';import{dirname,join}from 'path';export async function POST(req:Request){const{path:p,content}=await req.json();const full=join(process.cwd(),p);mkdirSync(dirname(full),{recursive:true});writeFileSync(full,Buffer.from(content,'base64'));return NextResponse.json({ok:true})}
